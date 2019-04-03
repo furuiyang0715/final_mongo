@@ -40,7 +40,7 @@ def task(logger):
     sql = MySql(conf, logger)
 
     # 获取所需的数据库表
-    tables_ = tables[:8]
+    tables_ = tables
     logger.info(tables_)
 
     # 获取所需要的数据库
