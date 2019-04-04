@@ -2,6 +2,7 @@ import time
 
 import datetime
 import configparser
+import logging
 
 
 from pymysqlreplication import BinLogStreamReader
@@ -10,6 +11,8 @@ from pymysqlreplication.row_event import (
     UpdateRowsEvent,
     WriteRowsEvent,
 )
+
+# logger = logging.getLogger(__name__)
 
 
 def mysql_stream(conf, timestamp, dbs, tables):
@@ -88,24 +91,26 @@ def mysql_stream(conf, timestamp, dbs, tables):
 
             for binlogevent in stream:
                 # binlogevent.dump()
-                schema = "%s" % binlogevent.schema
-                table = "%s" % binlogevent.table
+                # schema = "%s" % binlogevent.schema
+                # table = "%s" % binlogevent.table
 
                 for row in binlogevent.rows:
                     if isinstance(binlogevent, DeleteRowsEvent):
                         vals = row["values"]
-                        event_type = 'delete'
-                        print(vals.get("id"))
+                        # event_type = 'delete'
+                        # print(vals.get("id"))
                         del_list.append(vals.get("id"))
                     elif isinstance(binlogevent, UpdateRowsEvent):
                         vals = dict()
                         vals["before"] = row["before_values"]
                         vals["after"] = row["after_values"]
-                        event_type = 'update'
+                        print(vals)
+                        # event_type = 'update'
                         update_list.append(vals['before'].get("id"))
                     elif isinstance(binlogevent, WriteRowsEvent):
-                        vals = row["values"]
-                        event_type = 'insert'
+                        # vals = row["values"]
+                        # event_type = 'insert'
+                        pass
 
             stream.close()
     return del_list, update_list
@@ -122,11 +127,11 @@ def gen_binloginfo(conf, t1, t2, dbs, tables):
     :return:
     """
     del_list1, update_list1 = mysql_stream(conf, t1, dbs, tables)
-    print(del_list1)
+    # logger.info(f"del_list1: {del_list1}")
     del_list2, update_list2 = mysql_stream(conf, t2, dbs, tables)
-    print(del_list2)
+    # logger.info(del_list2)
     if update_list1 or update_list2:
-        raise SystemError("有修改？？")
+        raise SystemError("有修改？？")  # derived_institution_summary.csv
     del_list = list(set(del_list1) - set(del_list2))
     return del_list
 
@@ -137,7 +142,7 @@ if __name__ == "__main__":
     config.read('conf/config.ini')
 
     # 获取昨天的时间戳
-    yest = datetime.datetime(2019, 4, 1, 14, 0, 0)
+    yest = datetime.datetime(2019, 4, 3, 0, 0, 0)
     timestamp = time.mktime(yest.timetuple())
 
     # mysql 配置
@@ -145,8 +150,8 @@ if __name__ == "__main__":
     # 获取db和table
     _db = conf.get("databases")
     from sync_tables import tables
-    _tables = tables[3:4]
+    _tables = ["derived_institution_summary"]
     print(_db, "---> ", _tables)
 
     del_list, update_list = mysql_stream(conf, timestamp, _db, _tables)
-    print(del_list, update_list)
+    print(update_list)

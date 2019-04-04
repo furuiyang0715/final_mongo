@@ -49,6 +49,7 @@ def task(logger):
 
     for db in db_:
         for table in tables_:
+            logger.info(f"table: {table}")
             # 获取更新的起始位置 即上一次更新到的 id
             start = mongo.get_last_id(table)
             logger.info(f"start: {start}")
@@ -73,14 +74,7 @@ def task(logger):
 
                 # 进行更新 (start, end] 左开右闭区间
                 load_data(conf, m_conf, db, table, start, end)
-
-                # 将本次更新的时间点写入
-                res = mongo.flash_time(table, new_time)
-                logger.info(f"flash_time: {res}")
-
-                # 将本地更新到的 id 位置写入
-                res2 = mongo.flash_id(table, end)
-                logger.info(f"flash_id: {res2}")
+                logger.info("load success")
 
                 # 查询出两个时间点之间的删除操作 进行删除
                 del_list = gen_binloginfo(conf, last_time, new_time, [db], [table])
@@ -89,6 +83,14 @@ def task(logger):
                 # 删除mongo里面的记录
                 res3 = mongo.delete_ids(table, del_list)
                 logger.info(f"delete_ids: {res3}")
+
+                # 将本次更新的时间点写入
+                res = mongo.flash_time(table, new_time)
+                logger.info(f"flash_time: {res}")
+
+                # 将本地更新到的 id 位置写入
+                res2 = mongo.flash_id(table, end)
+                logger.info(f"flash_id: {res2}")
 
 
 class LoggerWriter:
@@ -116,7 +118,7 @@ class MyMongoDaemon(Daemon):
         except ImportError:
             self.setproctitle = False
 
-        self.logger.info("Running. ")
+        self.logger.info("Running into. ")
         self.dummy_sched()
 
         self.scheduler()
@@ -152,11 +154,14 @@ class MyMongoDaemon(Daemon):
         self.logger.info(f"poking 0002, code = {code}")
 
     def dummy_sched(self):
+        # self.logger.info("---")
         self.poke_one()
+        # self.logger.info("---")
         try:
+            self.logger.info("into")
             task(self.logger)
         except Exception as e:
-            self.logger.warning(f"task fail, {e}")
+            self.logger.warning(f"task fail, {e}", exc_info=True)
             sys.exit(1)
 
     def write_pid(self, pid):

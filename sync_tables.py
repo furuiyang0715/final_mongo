@@ -1,7 +1,4 @@
 tables = [
-    # 'risk_data',
-
-    # 挂牌修复列表
     'economic_gdp',
     'futures_basic',
     'comcn_embeddedvaluechange',
@@ -14,22 +11,18 @@ tables = [
     'const_personal',
     'comcn_bankindiconst',
     'comcn_financespecialindexsc',
-
-    'hkland_historycashflow',
     'const_industry',
-    'derived_institution_summary',
     'stk_specialtrade',
     'hkland_historytradestat',
     'index_indexprepcomponent',
     'stk_codechangeserial',
-    'const_secumain',
+    'const_secumain',  # 检测有删除
     'const_areacode',
-
     'const_newsconst',
     'stk_liststatus',
-    'comcn_controllingshareholders',
-    'comcn_actualcontroller',
-    'comcn_violationhalding',
+    'comcn_controllingshareholders',  # 检测有删除
+    'comcn_actualcontroller',  # 检测有删除
+    'comcn_violationhalding',  # list index out of range 说明其中有长文本换行
     'const_product',
     'comcn_financespecialindex',
     'index_basicinfo',
@@ -48,9 +41,7 @@ tables = [
     'comcn_bankincomeexpense',
     'const_systemconst',
     'comcn_rewardstat',
-    'derived_institution_detail',
     'comcn_coconcept',
-    'news_secu',
     'comcn_bankregulator',
     'comcn_relatedsh',
     'comcn_exgindustry',
@@ -94,14 +85,12 @@ tables = [
     'comcn_equitychangesstatement',
     'comcn_mainshlistnew',
     'trans_valuations',
-
-    # 测试期间暂时先不同步这一部分
-    # 'stk_quotori_day',
-    # 'stk_quotidxwind_day',
-    # 'comcn_dindicesforvaluation',
-    # 'stk_quot_day',
-    # 'stk_quot_idx',
-    # 'index_indexcomponentsweight',
-    # 'index_weight',
-    # 'index_swsindexcw'
+    'stk_quotori_day',
+    'stk_quotidxwind_day',
+    'comcn_dindicesforvaluation',
+    'stk_quot_day',
+    'stk_quot_idx',
+    'index_indexcomponentsweight',
+    'index_weight',
+    'index_swsindexcw'
 ]
