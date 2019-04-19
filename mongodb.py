@@ -106,7 +106,7 @@ class MyMongoDB:
         except Exception:
             raise
 
-        last_time = last_time[0].get("last_time") if last_time else None
+        last_time = last_time[0].get("timestamp") if last_time else None
 
         return last_time
 

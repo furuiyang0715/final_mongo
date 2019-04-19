@@ -120,7 +120,7 @@ def gen_binloginfo(conf, t1, t2, dbs, tables):
     """
     计算两个时间点之间的 binlog 日志记录的删除记录
     :param conf:
-    :param t1:
+    :param t1: 第一次 t1 为 None 相当于求出所有的删除逻辑， t1-t2 得到的是自建表以来的所有删除项
     :param t2:
     :param dbs:
     :param tables:

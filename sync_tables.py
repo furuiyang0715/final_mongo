@@ -16,13 +16,13 @@ tables = [
     'hkland_historytradestat',
     'index_indexprepcomponent',
     'stk_codechangeserial',
-    'const_secumain',  # 检测有删除
+    'const_secumain',
     'const_areacode',
     'const_newsconst',
     'stk_liststatus',
-    'comcn_controllingshareholders',  # 检测有删除
-    'comcn_actualcontroller',  # 检测有删除
-    'comcn_violationhalding',  # list index out of range 说明其中有长文本换行
+    'comcn_controllingshareholders',
+    'comcn_actualcontroller',
+    'comcn_violationhalding',
     'const_product',
     'comcn_financespecialindex',
     'index_basicinfo',
