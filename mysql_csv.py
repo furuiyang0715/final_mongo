@@ -108,7 +108,8 @@ def import2mongo(file, db, table, conf):
     try:
         p1 = subprocess.Popen(showposcommand, shell=True)
     except Exception as e:
-        print(f"fail to import to mongodb, because {e}")
+        raise
+        # print(f"fail to import to mongodb, because {e}")
         # raise SystemError(e)
         # return None
     p1.wait()

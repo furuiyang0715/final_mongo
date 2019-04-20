@@ -77,12 +77,12 @@ def task(logger):
                 logger.info("load success")
 
                 # 查询出两个时间点之间的删除操作 进行删除
-                del_list = gen_binloginfo(conf, last_time, new_time, [db], [table])
-                logger.info(f"del_list: {del_list}")
+                # del_list = gen_binloginfo(conf, last_time, new_time, [db], [table])
+                # logger.info(f"del_list: {del_list}")
 
                 # 删除mongo里面的记录
-                res3 = mongo.delete_ids(table, del_list)
-                logger.info(f"delete_ids: {res3}")
+                # res3 = mongo.delete_ids(table, del_list)
+                # logger.info(f"delete_ids: {res3}")
 
                 # 将本次更新的时间点写入
                 res = mongo.flash_time(table, new_time)
@@ -114,19 +114,27 @@ class MyMongoDaemon(Daemon):
             util.find_spec('setproctitle')
             self.setproctitle = True
             import setproctitle
-            setproctitle.setproctitle('sync')
+            setproctitle.setproctitle('mysync')
         except ImportError:
             self.setproctitle = False
 
         self.logger.info("Running into. ")
-        self.dummy_sched()
+        try:
+            self.dummy_sched()
+        except Exception as e:
+            self.logger.error(f"定时执行第一次失败，原因是 {e}")
+            raise
 
-        self.scheduler()
+        try:
+            self.scheduler()
+        except Exception as e:
+            self.logger.info(f"开启定时任务失败，原因是{e}")
+            raise
 
     def scheduler(self):
         sched = BlockingScheduler()
         try:
-            sched.add_job(self.dummy_sched, 'interval', minutes=20)
+            sched.add_job(self.dummy_sched, 'interval', minutes=30)
             sched.start()
         except Exception as e:
             self.logger.error(f'Cannot start scheduler. Error: {e}')
@@ -154,9 +162,11 @@ class MyMongoDaemon(Daemon):
         self.logger.info(f"poking 0002, code = {code}")
 
     def dummy_sched(self):
-        # self.logger.info("---")
-        self.poke_one()
-        # self.logger.info("---")
+        # try:
+        #     self.poke_one()
+        # except Exception as e:
+        #     self.logger.info(f'poke 失败，失败的原因是{e}')
+
         try:
             self.logger.info("into")
             task(self.logger)
