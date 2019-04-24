@@ -94,7 +94,7 @@ def import2mongo(file, db, table, conf):
     """
     # mongoimport --host=127.0.0.1 --db datacenter --collection table1 --type csv
     # --headerline --ignoreBlanks --file table1.csv
-    showposcommand = f"mongoimport --host={conf['host']} --db {db} --collection {table} \
+    showposcommand = f"mongo import --host={conf['host']} --db {db} --collection {table} \
     --type csv --headerline --ignoreBlanks --file {file}"
     # logger.info(showposcommand)
 
