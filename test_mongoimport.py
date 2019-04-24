@@ -16,7 +16,7 @@ table = "economic_gdp"
 
 file = "datacenter_economic_gdp_-1-417.csv"
 
-showposcommand = f"mongo import --host={conf['host']} --db {db} --collection {table} --type csv --headerline --ignoreBlanks --file {file}"
+showposcommand = f"mongoimport --host={conf['host']} --db {db} --collection {table} --type csv --headerline --ignoreBlanks --file {file}"
 
 p1 = subprocess.Popen(showposcommand, shell=True)
 
