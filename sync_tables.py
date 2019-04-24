@@ -75,7 +75,7 @@ tables = [
     'comcn_balancesheetall_jy',
     'comcn_balancesheet',
     'comcn_incomestatement',
-    'comcn_incomestatementall_jy',
+    # 'comcn_incomestatementall_jy',
     'comcn_nonrecurringevent',
     'comcn_executivesholdings',
     'comcn_mainoperincome',
